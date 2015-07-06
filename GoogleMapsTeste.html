@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+        function initialize() {
+            var map_canvas = document.getElementById('map_canvas');
+            var map_options = {
+                center: new google.maps.LatLng(-19,2203, -42,4842),
+                zoom: 4,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+
+            var map = new google.maps.Map(map_canvas, map_options)
+            var geocoder = new google.maps.Geocoder();
+            var address = window.parent.Xrm.Page.data.entity.attributes.get('cad_composicaoend1').getValue();
+            //var address = document.getElementById("address1_composite").value;
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(14);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                } else {
+                    alert("Geocode was not successful for the following reason: " + status);
+                }
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+</head>
+<body>
+    <div style="width: 100%; height: 100%;" id="map_canvas">Mapa</div>
+</body>
+</html>
